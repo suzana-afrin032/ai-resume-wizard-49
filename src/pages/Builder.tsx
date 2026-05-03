@@ -100,26 +100,51 @@ function BuilderInner() {
   const downloadPDF = async () => {
     if (!previewRef.current) return;
     toast.info("Generating PDF…");
-    const node = previewRef.current.querySelector(".resume-page") as HTMLElement;
-    if (!node) return;
-    const canvas = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: "#fff" });
-    const imgData = canvas.toDataURL("image/jpeg", 0.95);
-    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-    const pdfW = pdf.internal.pageSize.getWidth();
-    const pdfH = pdf.internal.pageSize.getHeight();
-    const ratio = canvas.width / canvas.height;
-    const imgW = pdfW;
-    const imgH = imgW / ratio;
-    let heightLeft = imgH, position = 0;
-    pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
-    heightLeft -= pdfH;
-    while (heightLeft > 0) {
-      position = heightLeft - imgH;
-      pdf.addPage();
-      pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
+    const original = previewRef.current.querySelector(".resume-page") as HTMLElement;
+    if (!original) return;
+
+    // Clone off-screen at full A4 width with no parent transform/scale to avoid
+    // html2canvas layout glitches (overlapping text from scaled flex/gap).
+    const wrapper = document.createElement("div");
+    wrapper.style.cssText =
+      "position:fixed;left:-10000px;top:0;background:#fff;width:210mm;z-index:-1;";
+    const clone = original.cloneNode(true) as HTMLElement;
+    clone.style.transform = "none";
+    clone.style.width = "210mm";
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
+
+    try {
+      // Wait for fonts/layout to settle
+      if ((document as any).fonts?.ready) await (document as any).fonts.ready;
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+
+      const canvas = await html2canvas(clone, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: clone.scrollWidth,
+        windowHeight: clone.scrollHeight,
+      });
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const pdfH = pdf.internal.pageSize.getHeight();
+      const imgH = (canvas.height * pdfW) / canvas.width;
+      let heightLeft = imgH;
+      let position = 0;
+      pdf.addImage(imgData, "JPEG", 0, position, pdfW, imgH);
       heightLeft -= pdfH;
+      while (heightLeft > 0) {
+        position = heightLeft - imgH;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, pdfW, imgH);
+        heightLeft -= pdfH;
+      }
+      pdf.save(`${title || "resume"}.pdf`);
+    } finally {
+      document.body.removeChild(wrapper);
     }
-    pdf.save(`${title || "resume"}.pdf`);
   };
 
   const aiSummary = async () => {
