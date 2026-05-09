@@ -237,7 +237,43 @@ function BuilderInner() {
             </TabsList>
 
             <TabsContent value="personal">
-              <Card className="p-5 space-y-3">
+              <Card className="p-5 space-y-4">
+                <div className="flex items-center gap-4">
+                  <label className="relative group cursor-pointer shrink-0">
+                    <div className="w-24 h-24 rounded-full border-2 border-dashed border-border bg-muted overflow-hidden flex items-center justify-center">
+                      {data.personal.photo ? (
+                        <img src={data.personal.photo} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <UserIcon className="w-8 h-8 text-muted-foreground" />
+                      )}
+                    </div>
+                    <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium">
+                      {data.personal.photo ? "Change Photo" : "Upload Photo"}
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 2 * 1024 * 1024) { toast.error("Image must be under 2MB"); return; }
+                        const reader = new FileReader();
+                        reader.onload = () => updatePersonal("photo", reader.result as string);
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                  </label>
+                  <div className="flex-1">
+                    <Label className="text-sm">Profile photo</Label>
+                    <p className="text-xs text-muted-foreground mb-2">Optional. Square images work best (max 2MB).</p>
+                    {data.personal.photo && (
+                      <Button size="sm" variant="outline" onClick={() => updatePersonal("photo", "")}>
+                        <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
+                      </Button>
+                    )}
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div><Label>Full name</Label><Input value={data.personal.fullName} onChange={(e) => updatePersonal("fullName", e.target.value)} /></div>
                   <div><Label>Job title</Label><Input value={data.personal.title} onChange={(e) => updatePersonal("title", e.target.value)} placeholder="Senior Software Engineer" /></div>
