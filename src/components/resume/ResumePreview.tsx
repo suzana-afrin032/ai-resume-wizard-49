@@ -185,6 +185,15 @@ export const ResumePreview = ({ data, template }: Props) => {
   return (
     <div className="resume-page mx-auto flex" style={{ width: "210mm", minHeight: "297mm", fontFamily: "Inter, sans-serif" }}>
       <aside className="w-[35%] p-6 text-white" style={{ background: accent }}>
+        {p.photo && (
+          <img
+            src={p.photo}
+            alt={p.fullName}
+            className="rounded-full object-cover mb-4 mx-auto block"
+            style={{ width: "120px", height: "120px", border: "3px solid rgba(255,255,255,0.4)" }}
+            crossOrigin="anonymous"
+          />
+        )}
         <h1 className="text-2xl font-bold leading-tight">{p.fullName || "Your Name"}</h1>
         {p.title && <div className="text-sm opacity-90 mt-1">{p.title}</div>}
         <div className="mt-6 space-y-1.5 text-xs">
