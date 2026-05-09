@@ -81,6 +81,7 @@ export const emptyResume: ResumeData = {
     linkedin: "",
     github: "",
     website: "",
+    photo: "",
   },
   summary: "",
   experience: [],
