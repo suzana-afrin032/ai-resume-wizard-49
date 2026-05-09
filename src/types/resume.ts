@@ -7,6 +7,7 @@ export interface PersonalInfo {
   linkedin: string;
   github: string;
   website: string;
+  photo?: string;
 }
 
 export interface EducationItem {
