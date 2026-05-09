@@ -7,6 +7,7 @@ export interface PersonalInfo {
   linkedin: string;
   github: string;
   website: string;
+  photo?: string;
 }
 
 export interface EducationItem {
@@ -80,6 +81,7 @@ export const emptyResume: ResumeData = {
     linkedin: "",
     github: "",
     website: "",
+    photo: "",
   },
   summary: "",
   experience: [],

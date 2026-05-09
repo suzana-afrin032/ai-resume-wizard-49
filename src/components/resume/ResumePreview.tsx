@@ -134,6 +134,15 @@ export const ResumePreview = ({ data, template }: Props) => {
     return (
       <div className="resume-page p-10 mx-auto" style={{ width: "210mm", minHeight: "297mm", fontFamily: "Georgia, serif" }}>
         <header className="text-center mb-6 pb-4 border-b-2" style={{ borderColor: accent }}>
+          {p.photo && (
+            <img
+              src={p.photo}
+              alt={p.fullName}
+              className="mx-auto mb-3 rounded-full object-cover"
+              style={{ width: "110px", height: "110px", border: `3px solid ${accent}` }}
+              crossOrigin="anonymous"
+            />
+          )}
           <h1 className="text-3xl font-bold" style={{ color: accent }}>{p.fullName || "Your Name"}</h1>
           {p.title && <div className="text-base text-gray-600 mt-1">{p.title}</div>}
           <div className="flex justify-center flex-wrap gap-3 mt-2 text-xs text-gray-600">
@@ -148,11 +157,22 @@ export const ResumePreview = ({ data, template }: Props) => {
   if (template === "minimal") {
     return (
       <div className="resume-page p-12 mx-auto" style={{ width: "210mm", minHeight: "297mm", fontFamily: "Inter, sans-serif" }}>
-        <header className="mb-8">
-          <h1 className="text-4xl font-light tracking-tight">{p.fullName || "Your Name"}</h1>
-          {p.title && <div className="text-sm text-gray-500 mt-1 uppercase tracking-widest">{p.title}</div>}
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-600">
-            {contactItems.map((c, i) => <span key={i}>{c.text}</span>)}
+        <header className="mb-8 flex items-center gap-5">
+          {p.photo && (
+            <img
+              src={p.photo}
+              alt={p.fullName}
+              className="rounded-full object-cover shrink-0"
+              style={{ width: "100px", height: "100px", border: "1px solid #e5e5e5" }}
+              crossOrigin="anonymous"
+            />
+          )}
+          <div className="flex-1">
+            <h1 className="text-4xl font-light tracking-tight">{p.fullName || "Your Name"}</h1>
+            {p.title && <div className="text-sm text-gray-500 mt-1 uppercase tracking-widest">{p.title}</div>}
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-600">
+              {contactItems.map((c, i) => <span key={i}>{c.text}</span>)}
+            </div>
           </div>
         </header>
         {order.map(renderSection)}
@@ -160,10 +180,20 @@ export const ResumePreview = ({ data, template }: Props) => {
     );
   }
 
+
   // Modern (sidebar layout)
   return (
     <div className="resume-page mx-auto flex" style={{ width: "210mm", minHeight: "297mm", fontFamily: "Inter, sans-serif" }}>
       <aside className="w-[35%] p-6 text-white" style={{ background: accent }}>
+        {p.photo && (
+          <img
+            src={p.photo}
+            alt={p.fullName}
+            className="rounded-full object-cover mb-4 mx-auto block"
+            style={{ width: "120px", height: "120px", border: "3px solid rgba(255,255,255,0.4)" }}
+            crossOrigin="anonymous"
+          />
+        )}
         <h1 className="text-2xl font-bold leading-tight">{p.fullName || "Your Name"}</h1>
         {p.title && <div className="text-sm opacity-90 mt-1">{p.title}</div>}
         <div className="mt-6 space-y-1.5 text-xs">
