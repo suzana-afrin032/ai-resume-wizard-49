@@ -180,20 +180,6 @@ export const ResumePreview = ({ data, template }: Props) => {
     );
   }
 
-  if (template === "minimal") {
-    return (
-      <div className="resume-page p-12 mx-auto" style={{ width: "210mm", minHeight: "297mm", fontFamily: "Inter, sans-serif" }}>
-        <header className="mb-8">
-          <h1 className="text-4xl font-light tracking-tight">{p.fullName || "Your Name"}</h1>
-          {p.title && <div className="text-sm text-gray-500 mt-1 uppercase tracking-widest">{p.title}</div>}
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-600">
-            {contactItems.map((c, i) => <span key={i}>{c.text}</span>)}
-          </div>
-        </header>
-        {order.map(renderSection)}
-      </div>
-    );
-  }
 
   // Modern (sidebar layout)
   return (
