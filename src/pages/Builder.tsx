@@ -50,7 +50,7 @@ function BuilderInner() {
   const nav = useNavigate();
   const [data, setData] = useState<ResumeData>(emptyResume);
   const [title, setTitle] = useState("Untitled Resume");
-  const [template, setTemplate] = useState<TemplateKey>("modern");
+  const [template, setTemplate] = useState<TemplateKey>("executive");
   const [resumeId, setResumeId] = useState<string | null>(id && id !== "new" ? id : null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
