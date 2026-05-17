@@ -68,7 +68,7 @@ function BuilderInner() {
       if (row) {
         setData({ ...emptyResume, ...(row.data as any) });
         setTitle(row.title);
-        setTemplate((row.template as TemplateKey) || "modern");
+        setTemplate(normalizeTemplate(row.template as string));
       }
       setLoading(false);
     })();
