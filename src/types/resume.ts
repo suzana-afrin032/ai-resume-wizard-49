@@ -42,6 +42,7 @@ export interface CertificationItem {
   name: string;
   issuer: string;
   date: string;
+  image?: string;
 }
 
 export interface LanguageItem {

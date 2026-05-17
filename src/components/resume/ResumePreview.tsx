@@ -219,11 +219,22 @@ function renderSections(
           return data.certifications.length ? (
             <Section key={key} title="Certifications" accent={accent} variant={variant}>
               {data.certifications.map((c) => (
-                <div key={c.id} className="flex justify-between text-sm">
-                  <span>
-                    <strong>{c.name}</strong> · {c.issuer}
-                  </span>
-                  <span className="text-xs text-gray-500">{c.date}</span>
+                <div key={c.id} className="flex items-center gap-3 mb-2 text-sm">
+                  {c.image && (
+                    <img
+                      src={c.image}
+                      alt=""
+                      crossOrigin="anonymous"
+                      className="object-cover rounded border shrink-0"
+                      style={{ width: 44, height: 44, borderColor: "#e5e5e5" }}
+                    />
+                  )}
+                  <div className="flex-1 flex justify-between items-baseline gap-2 min-w-0">
+                    <span className="truncate">
+                      <strong>{c.name}</strong> · {c.issuer}
+                    </span>
+                    <span className="text-xs text-gray-500 shrink-0">{c.date}</span>
+                  </div>
                 </div>
               ))}
             </Section>
@@ -476,8 +487,19 @@ export const ResumePreview = ({ data, template }: Props) => {
               Certifications &amp; Awards
             </h2>
             {data.certifications.map((c) => (
-              <div key={c.id} className="text-[13px]">
-                <strong>{c.name}</strong>, {c.issuer} <span className="italic text-gray-600">({c.date})</span>
+              <div key={c.id} className="flex items-center gap-3 mb-1 text-[13px]">
+                {c.image && (
+                  <img
+                    src={c.image}
+                    alt=""
+                    crossOrigin="anonymous"
+                    className="object-cover rounded border shrink-0"
+                    style={{ width: 40, height: 40, borderColor: "#d4d4d4" }}
+                  />
+                )}
+                <div className="flex-1 min-w-0">
+                  <strong>{c.name}</strong>, {c.issuer} <span className="italic text-gray-600">({c.date})</span>
+                </div>
               </div>
             ))}
           </section>

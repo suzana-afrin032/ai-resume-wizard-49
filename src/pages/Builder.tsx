@@ -422,11 +422,49 @@ function BuilderInner() {
                     </Button>
                   </div>
                   {data.certifications.map((c, idx) => (
-                    <div key={c.id} className="grid grid-cols-[1fr_1fr_120px_auto] gap-2 mb-2">
-                      <Input placeholder="Name" value={c.name} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, name: ev.target.value }; update("certifications", n); }} />
-                      <Input placeholder="Issuer" value={c.issuer} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, issuer: ev.target.value }; update("certifications", n); }} />
-                      <Input placeholder="Date" value={c.date} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, date: ev.target.value }; update("certifications", n); }} />
-                      <Button size="icon" variant="ghost" onClick={() => update("certifications", data.certifications.filter((_, i) => i !== idx))}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <div key={c.id} className="flex items-start gap-2 mb-2">
+                      <label className="relative group cursor-pointer shrink-0">
+                        <div className="w-14 h-14 rounded border-2 border-dashed border-border bg-muted overflow-hidden flex items-center justify-center">
+                          {c.image ? (
+                            <img src={c.image} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <Award className="w-5 h-5 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="absolute inset-0 rounded bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-medium text-center px-1">
+                          {c.image ? "Change" : "Upload"}
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(ev) => {
+                            const file = ev.target.files?.[0];
+                            if (!file) return;
+                            if (file.size > 2 * 1024 * 1024) { toast.error("Image must be under 2MB"); return; }
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const n = [...data.certifications];
+                              n[idx] = { ...c, image: reader.result as string };
+                              update("certifications", n);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                      <div className="grid grid-cols-[1fr_1fr_120px_auto] gap-2 flex-1">
+                        <Input placeholder="Name" value={c.name} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, name: ev.target.value }; update("certifications", n); }} />
+                        <Input placeholder="Issuer" value={c.issuer} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, issuer: ev.target.value }; update("certifications", n); }} />
+                        <Input placeholder="Date" value={c.date} onChange={(ev) => { const n = [...data.certifications]; n[idx] = { ...c, date: ev.target.value }; update("certifications", n); }} />
+                        <div className="flex gap-1">
+                          {c.image && (
+                            <Button size="icon" variant="ghost" onClick={() => { const n = [...data.certifications]; n[idx] = { ...c, image: "" }; update("certifications", n); }} title="Remove image">
+                              <Trash2 className="w-4 h-4 text-muted-foreground" />
+                            </Button>
+                          )}
+                          <Button size="icon" variant="ghost" onClick={() => update("certifications", data.certifications.filter((_, i) => i !== idx))}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
