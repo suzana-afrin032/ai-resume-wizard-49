@@ -206,11 +206,11 @@ function BuilderInner() {
               <span className="text-xs text-muted-foreground">{progress}%</span>
             </div>
             <Select value={template} onValueChange={(v) => setTemplate(v as TemplateKey)}>
-              <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="modern">Modern</SelectItem>
-                <SelectItem value="classic">Classic</SelectItem>
-                <SelectItem value="minimal">Minimal</SelectItem>
+                {(Object.keys(TEMPLATE_LABELS) as TemplateKey[]).map((k) => (
+                  <SelectItem key={k} value={k}>{TEMPLATE_LABELS[k]}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Button variant="outline" size="sm" onClick={() => window.print()}><Printer className="w-4 h-4 mr-1.5" />Print</Button>
