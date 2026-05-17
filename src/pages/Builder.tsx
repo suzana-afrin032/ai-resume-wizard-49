@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { ResumeData, emptyResume, SECTION_LABELS, SectionKey, TemplateKey } from "@/types/resume";
+import { ResumeData, emptyResume, SECTION_LABELS, SectionKey, TemplateKey, TEMPLATE_LABELS, normalizeTemplate } from "@/types/resume";
 import { ResumePreview } from "@/components/resume/ResumePreview";
 import { TagInput } from "@/components/resume/TagInput";
 import { SortableList, SortableSections } from "@/components/resume/Sortable";
@@ -50,7 +50,7 @@ function BuilderInner() {
   const nav = useNavigate();
   const [data, setData] = useState<ResumeData>(emptyResume);
   const [title, setTitle] = useState("Untitled Resume");
-  const [template, setTemplate] = useState<TemplateKey>("modern");
+  const [template, setTemplate] = useState<TemplateKey>("executive");
   const [resumeId, setResumeId] = useState<string | null>(id && id !== "new" ? id : null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -68,7 +68,7 @@ function BuilderInner() {
       if (row) {
         setData({ ...emptyResume, ...(row.data as any) });
         setTitle(row.title);
-        setTemplate((row.template as TemplateKey) || "modern");
+        setTemplate(normalizeTemplate(row.template as string));
       }
       setLoading(false);
     })();
@@ -206,11 +206,11 @@ function BuilderInner() {
               <span className="text-xs text-muted-foreground">{progress}%</span>
             </div>
             <Select value={template} onValueChange={(v) => setTemplate(v as TemplateKey)}>
-              <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="modern">Modern</SelectItem>
-                <SelectItem value="classic">Classic</SelectItem>
-                <SelectItem value="minimal">Minimal</SelectItem>
+                {(Object.keys(TEMPLATE_LABELS) as TemplateKey[]).map((k) => (
+                  <SelectItem key={k} value={k}>{TEMPLATE_LABELS[k]}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Button variant="outline" size="sm" onClick={() => window.print()}><Printer className="w-4 h-4 mr-1.5" />Print</Button>

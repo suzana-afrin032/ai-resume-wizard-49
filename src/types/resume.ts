@@ -111,4 +111,30 @@ export const SECTION_LABELS: Record<SectionKey, string> = {
   languages: "Languages",
 };
 
-export type TemplateKey = "modern" | "classic" | "minimal";
+export type TemplateKey =
+  | "executive"
+  | "tech"
+  | "creative"
+  | "academic"
+  | "functional"
+  | "startup"
+  | "project";
+
+export const TEMPLATE_LABELS: Record<TemplateKey, string> = {
+  executive: "Executive",
+  tech: "Tech Minimalist",
+  creative: "Creative Storyteller",
+  academic: "Academic / CV",
+  functional: "Career Changer",
+  startup: "Startup Hustler",
+  project: "Project-Centric",
+};
+
+export function normalizeTemplate(key: string | null | undefined): TemplateKey {
+  if (!key) return "executive";
+  if (key === "modern") return "creative";
+  if (key === "classic") return "executive";
+  if (key === "minimal") return "tech";
+  if (key in TEMPLATE_LABELS) return key as TemplateKey;
+  return "executive";
+}
