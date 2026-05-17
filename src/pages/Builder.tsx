@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { ResumeData, emptyResume, SECTION_LABELS, SectionKey, TemplateKey } from "@/types/resume";
+import { ResumeData, emptyResume, SECTION_LABELS, SectionKey, TemplateKey, TEMPLATE_LABELS, normalizeTemplate } from "@/types/resume";
 import { ResumePreview } from "@/components/resume/ResumePreview";
 import { TagInput } from "@/components/resume/TagInput";
 import { SortableList, SortableSections } from "@/components/resume/Sortable";
